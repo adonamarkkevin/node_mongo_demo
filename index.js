@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const { readdirSync } = require("fs");
 require("dotenv").config();
 
 const app = express();
@@ -23,6 +24,11 @@ mongoose
 // Parser
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: false }));
+
+// Routes
+readdirSync("./src/route").map((r) =>
+    app.use("/api", require("./src/route/" + r))
+);
 
 // PORT
 const PORT = process.env.PORT;
